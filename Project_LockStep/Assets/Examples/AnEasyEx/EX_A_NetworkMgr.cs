@@ -33,6 +33,7 @@ namespace Mirror.EX_A
         {
             base.OnStartServer();
             EX_A_Server.Instance.isServer = true;
+            EX_A_Server.Instance.StartServer();
         }
 
         public override void OnStartClient()

@@ -15,6 +15,7 @@ namespace Mirror.EX_A
         {
             NetworkClient.RegisterHandler<Msg_Join_Rsp>(OnJoinRsp);
             NetworkClient.RegisterHandler<Msg_Join_Ntf>(OnJoinNtf);
+            NetworkClient.RegisterHandler<Msg_Command_Ntf>(OnDoSthNtf);
         }
 
         private void OnJoinRsp(Msg_Join_Rsp msg)
@@ -25,6 +26,12 @@ namespace Mirror.EX_A
         private void OnJoinNtf(Msg_Join_Ntf msg)
         {
             EX_A_TextLog.instance.AppendLog($"Client: OnPlayerJoinNtf:{msg.playerIds.GetString()}");
+        }
+
+        private void OnDoSthNtf(Msg_Command_Ntf msg)
+        {
+            EX_A_Client.Instance.OnSyncCommands(msg);
+            //EX_A_TextLog.instance.AppendLog($"Client: OnDoSthNtf:{msg.playerId} at tick:{msg.serverTick}");
         }
     }
 }

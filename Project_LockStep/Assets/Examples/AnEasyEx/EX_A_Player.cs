@@ -36,6 +36,5 @@ namespace Mirror.EX_A
             EX_A_TextLog.instance.AppendLog($"Server: DoPlayerJoinNtf:{ids.GetString()}");
         }
         #endregion
-
     }
 }
