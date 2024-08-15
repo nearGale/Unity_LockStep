@@ -32,13 +32,14 @@ namespace Mirror.EX_A
         public override void OnStartServer()
         {
             base.OnStartServer();
-            EX_A_Server.Instance.isServer = true;
-            EX_A_Server.Instance.StartServer();
+            GameFacade.isServer = true;
+
+            ServerMessageSystem.Instance.RegisterMessageHandler();
         }
 
         public override void OnStartClient()
         {
-            EX_A_MsgHandler.Instance.SetupClient();
+            ClientMessageSystem.Instance.SetupClient();
         }
     }
 }
