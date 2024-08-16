@@ -44,6 +44,9 @@ namespace Mirror.EX_A
 
         private void OnBattleStart(Msg_BattleStart_Rsp msg)
         {
+            var randomSeed = msg.randomSeed;
+
+            ClientRandomSystem.Instance.BattleStart(randomSeed); // 设置随机数种子
             ClientRoomSystem.Instance.BattleStart();
             ClientTimerSystem.Instance.BattleStart();
             ClientLogicSystem.Instance.BattleStart();

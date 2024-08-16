@@ -41,7 +41,7 @@ namespace Mirror.EX_A
             switch (detail.eCommand)
             {
                 case ECommand.multi:
-                    val *= 2;
+                    val += ClientRandomSystem.Instance.GetRandomInt(50, 5000);
                     break;
             }
         }

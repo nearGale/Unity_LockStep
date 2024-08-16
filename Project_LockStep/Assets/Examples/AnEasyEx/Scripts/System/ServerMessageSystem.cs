@@ -37,7 +37,12 @@ namespace Mirror.EX_A
             ServerTimerSystem.Instance.battlePause = false;
             ServerCommandSyncSystem.Instance.StartBattle();
 
-            Msg_BattleStart_Rsp msgRsp = new Msg_BattleStart_Rsp();
+            var gameServerTick = GameHelper_Server.GetGameServerTick();
+            var seed = (int)(gameServerTick % 100);
+            Msg_BattleStart_Rsp msgRsp = new Msg_BattleStart_Rsp()
+            {
+                randomSeed = seed,
+            };
             NetworkServer.SendToAll(msgRsp);
         }
 

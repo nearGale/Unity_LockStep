@@ -33,7 +33,7 @@ namespace Mirror.EX_A
     /// </summary>
     public struct Msg_BattleStart_Rsp : NetworkMessage
     {
-
+        public int randomSeed;
     }
 
     /// <summary>

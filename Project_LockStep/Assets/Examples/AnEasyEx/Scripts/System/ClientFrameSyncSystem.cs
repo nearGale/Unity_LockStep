@@ -42,8 +42,6 @@ namespace Mirror.EX_A
             var clientTick = GameHelper_Client.GetClientTick();
             var battleServerTick = GameHelper_Client.GetBattleServerTick();
 
-            if (clientTick >= battleServerTick) return;
-
             if (frameCommandDict.Remove(clientTick, out var oneFramCommands))
             {
                 foreach (var cmd in oneFramCommands.details)
@@ -72,8 +70,6 @@ namespace Mirror.EX_A
                     Debug.LogError("ERR!!! 有重复帧的指令");
                 }
             }
-
-            ClientTimerSystem.Instance.clientTick++;
         }
 
         private void ProcessCommand(ulong tick, CommandDetail detail)

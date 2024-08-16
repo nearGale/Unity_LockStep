@@ -463,7 +463,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: x2
+  m_Text: Add Random Int
 --- !u!222 &269677666
 CanvasRenderer:
   m_ObjectHideFlags: 0
