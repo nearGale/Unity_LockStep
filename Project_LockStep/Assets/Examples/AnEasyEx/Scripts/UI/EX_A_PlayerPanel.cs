@@ -26,8 +26,8 @@ namespace Mirror.EX_A
         {
             textValue.text = $"Value:{ClientLogicSystem.Instance.val}";
 
-            var ct = ClientLogicSystem.Instance.clientTick;
-            var st = ClientLogicSystem.Instance.serverTick;
+            var ct = GameHelper_Client.GetClientTick();
+            var st = GameHelper_Client.GetBattleServerTick();
             textTick.text = $"client:{ct} \n server:{st} \n delta:{st - ct}";
         }
 

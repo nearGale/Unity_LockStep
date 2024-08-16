@@ -29,7 +29,7 @@ namespace Mirror.EX_A
             NetworkClient.RegisterHandler<Msg_Join_Rsp>(OnJoinRsp);
             NetworkClient.RegisterHandler<Msg_Join_Ntf>(OnJoinNtf);
             NetworkClient.RegisterHandler<Msg_BattleStart_Rsp>(OnBattleStart);
-            NetworkClient.RegisterHandler<Msg_Command_Ntf>(OnDoSthNtf);
+            NetworkClient.RegisterHandler<Msg_Command_Ntf>(OnCommandNtf);
         }
 
         private void OnJoinRsp(Msg_Join_Rsp msg)
@@ -44,12 +44,17 @@ namespace Mirror.EX_A
 
         private void OnBattleStart(Msg_BattleStart_Rsp msg)
         {
+            ClientRoomSystem.Instance.BattleStart();
+            ClientTimerSystem.Instance.BattleStart();
             ClientLogicSystem.Instance.BattleStart();
         }
 
-        private void OnDoSthNtf(Msg_Command_Ntf msg)
+        // TODO: 重连 BattleReconnect
+        // TODO: battleRoomId
+
+        private void OnCommandNtf(Msg_Command_Ntf msg)
         {
-            ClientLogicSystem.Instance.OnSyncCommands(msg);
+            ClientFrameSyncSystem.Instance.OnSyncCommands(msg);
         }
     }
 }

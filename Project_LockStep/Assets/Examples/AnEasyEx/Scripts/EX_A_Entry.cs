@@ -17,7 +17,10 @@ namespace Mirror.EX_A
 
             // 客户端逻辑
             ClientMessageSystem.Instance,
+            ClientRoomSystem.Instance,
+            ClientFrameSyncSystem.Instance,
             ClientLogicSystem.Instance,
+            ClientTimerSystem.Instance,
         };
 
         void Start()

@@ -9,21 +9,11 @@ namespace Mirror.EX_A
     /// </summary>
     public class ClientLogicSystem : Singleton<ClientLogicSystem>, ISystem
     {
-        public ulong clientTick;
-        public ulong serverTick;
-
-        /// <summary>
-        /// 字典：帧 -> 这一帧的指令集合
-        /// </summary>
-        public Dictionary<ulong, oneFrameCommands> frameCommandDict = new();
-
         /// <summary> 一个测试用例，用于计算帧同步的结果 </summary>
-        public int val;
+        public float val;
 
         public void Start()
         {
-            clientTick = 0;
-            frameCommandDict.Clear();
         }
 
         public void Update()
@@ -32,59 +22,28 @@ namespace Mirror.EX_A
 
         public void LogicUpdate()
         {
-            ProcessTick();
+            if (ClientRoomSystem.Instance.IsBattleRoomRunning())
+            {
+                val += 0.001f;
+            }
         }
 
+        /// <summary>
+        /// 进入战斗房间时，重置所有的游戏数据
+        /// </summary>
         public void BattleStart()
         {
-            clientTick = 0;
             val = 0;
         }
 
-        // TODO: tick 出 command 逻辑拆出
-        // TODO: 同步随机数
-        private void ProcessTick()
+        public void ProcessCommand(CommandDetail detail)
         {
-            if (clientTick >= serverTick) return;
-
-            if (frameCommandDict.Remove(clientTick, out var oneFramCommands))
+            switch (detail.eCommand)
             {
-                foreach(var cmd in oneFramCommands.details) 
-                {
-                    ProcessCommand(clientTick, cmd);
-                }
+                case ECommand.multi:
+                    val *= 2;
+                    break;
             }
-
-            if (clientTick % 100 == 1)
-            {
-                val += 1;
-            }
-
-            clientTick++;
-        }
-
-        public void OnSyncCommands(Msg_Command_Ntf msg)
-        {
-            //GameHelper_Common.UILog($"Client: Rcv: {clientTick} {Time.time}");
-            serverTick = msg.curBattleServerTick;
-            foreach(var command in msg.commandsSet) // command 是一帧的指令集合
-            {
-                GameHelper_Common.UILog($"Client: Rcv: {command.serverTick} at {clientTick}/{serverTick}");
-                if (!frameCommandDict.ContainsKey(command.serverTick))
-                {
-                    frameCommandDict.Add(command.serverTick, command);
-                }
-                else
-                {
-                    Debug.LogError("ERR!!! 有重复帧的指令");
-                }
-            }
-        }
-
-        private void ProcessCommand(ulong tick, CommandDetail detail)
-        {
-            val *= 2;
-            GameHelper_Common.UILog($"Client: ProcessCommand:{detail.playerId} {detail.eCommand} at tick:{tick}");
         }
     }
 }
