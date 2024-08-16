@@ -29,7 +29,6 @@ namespace Mirror.EX_A
 
         public void LogicUpdate()
         {
-            clientTick++;
         }
 
         /// <summary>

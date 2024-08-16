@@ -58,12 +58,11 @@ namespace Mirror.EX_A
             //GameHelper_Common.UILog($"Client: Rcv: {clientTick} {Time.time}");
 
             var clientTick = GameHelper_Client.GetClientTick();
-            var battleServerTick = GameHelper_Client.GetBattleServerTick();
 
-            battleServerTick = msg.curBattleServerTick;
+            ClientTimerSystem.Instance.battleServerTick = msg.curBattleServerTick;
             foreach (var command in msg.commandsSet) // command 是一帧的指令集合
             {
-                GameHelper_Common.UILog($"Client: Rcv: {command.serverTick} at {clientTick}/{battleServerTick}");
+                GameHelper_Common.UILog($"Client: Rcv: {command.serverTick} at {clientTick}/{GameHelper_Client.GetBattleServerTick()}");
                 if (!frameCommandDict.ContainsKey(command.serverTick))
                 {
                     frameCommandDict.Add(command.serverTick, command);
@@ -73,6 +72,8 @@ namespace Mirror.EX_A
                     Debug.LogError("ERR!!! 有重复帧的指令");
                 }
             }
+
+            ClientTimerSystem.Instance.clientTick++;
         }
 
         private void ProcessCommand(ulong tick, CommandDetail detail)

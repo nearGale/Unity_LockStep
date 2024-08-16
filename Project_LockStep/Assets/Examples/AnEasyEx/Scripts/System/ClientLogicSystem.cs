@@ -10,7 +10,7 @@ namespace Mirror.EX_A
     public class ClientLogicSystem : Singleton<ClientLogicSystem>, ISystem
     {
         /// <summary> 一个测试用例，用于计算帧同步的结果 </summary>
-        public float val;
+        public int val;
 
         public void Start()
         {
@@ -24,7 +24,7 @@ namespace Mirror.EX_A
         {
             if (ClientRoomSystem.Instance.IsBattleRoomRunning())
             {
-                val += 0.001f;
+                val += 1;
             }
         }
 

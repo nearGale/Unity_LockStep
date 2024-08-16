@@ -24,7 +24,8 @@ namespace Mirror.EX_A
 
         private void Update()
         {
-            textValue.text = $"Value:{ClientLogicSystem.Instance.val}";
+            var val = ((float)ClientLogicSystem.Instance.val / 1000);
+            textValue.text = $"Value:{val.ToString("F3")}";
 
             var ct = GameHelper_Client.GetClientTick();
             var st = GameHelper_Client.GetBattleServerTick();
