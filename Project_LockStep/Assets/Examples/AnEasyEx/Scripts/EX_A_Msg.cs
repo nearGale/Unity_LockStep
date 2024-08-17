@@ -5,11 +5,45 @@ using UnityEngine;
 namespace Mirror.EX_A
 {
     /// <summary>
+    /// 客户端连接到服务器后，给这个人下发回包
+    /// 让客户端进行 ID 校验流程
+    /// </summary>
+    public struct Msg_PlayerConnect_Rsp : NetworkMessage
+    {
+    }
+
+    /// <summary>
+    /// 客户端申请 ID 校验
+    /// </summary>
+    public struct Msg_PlayerIdentify_Req : NetworkMessage
+    {
+        public string playerName; // 申请登录的playerName TODO: 后续改为uuid之类的
+    }
+
+    /// <summary>
+    /// ID 校验结果
+    /// </summary>
+    public enum EIdentifyResult
+    {
+        Succeed,
+        Failed,
+    }
+
+    /// <summary>
     /// 加入房间回包，给加入的人，告诉他自己的playerId是多少
     /// </summary>
-    public struct Msg_Join_Rsp : NetworkMessage
+    public struct Msg_PlayerIdentify_Rsp : NetworkMessage
     {
+        public EIdentifyResult result;
         public uint playerId;
+    }
+
+    /// <summary>
+    /// 告诉客户端即将断开连接
+    /// </summary>
+    public struct Msg_ClientWillDisconnect_Rsp : NetworkMessage
+    {
+
     }
 
     /// <summary>

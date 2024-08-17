@@ -45,6 +45,7 @@ namespace Mirror.EX_A
         /// </summary>
         public bool IsBattleRoomRunning()
         {
+            // TODO: 连接着服务器
             return inBattle && !battlePause;
         }
     }

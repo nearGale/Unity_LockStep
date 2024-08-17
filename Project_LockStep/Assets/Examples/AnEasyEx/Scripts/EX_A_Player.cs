@@ -17,23 +17,25 @@ namespace Mirror.EX_A
         {
             base.OnStartServer();
 
-            var playerId = ServerPlayerSystem.Instance.AddPlayer(netIdentity);
-
-            Msg_Join_Rsp msgRsp = new Msg_Join_Rsp()
-            {
-                playerId = playerId
-            };
+            Msg_PlayerConnect_Rsp msgRsp = new();
             netIdentity.connectionToClient.Send(msgRsp);
 
-            var ids = ServerPlayerSystem.Instance.playerDict.Keys.ToList();
-            Msg_Join_Ntf msg = new Msg_Join_Ntf()
-            {
-                playerIds = ids
-            };
+            GameHelper_Common.UILog($"Server: OnPlayerConnect");
 
-            NetworkServer.SendToAll(msg);
-            GameHelper_Common.UILog($"Server: OnPlayerJoinReq:{playerId}");
-            GameHelper_Common.UILog($"Server: DoPlayerJoinNtf:{ids.GetString()}");
+            // 检测到有客户端连接，接下来进入ID验证环节
+            // 验证通过：
+            //    => 广播给所有人，有新人登录服务器 Msg_Join_Ntf
+
+
+
+            //var ids = ServerPlayerSystem.Instance.playerDict.Keys.ToList();
+            //Msg_Join_Ntf msg = new Msg_Join_Ntf()
+            //{
+            //    playerIds = ids
+            //};
+
+            //NetworkServer.SendToAll(msg);
+            //GameHelper_Common.UILog($"Server: DoPlayerJoinNtf:{ids.GetString()}");
         }
         #endregion
     }

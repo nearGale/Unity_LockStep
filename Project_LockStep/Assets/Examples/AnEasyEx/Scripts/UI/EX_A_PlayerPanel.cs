@@ -9,6 +9,7 @@ namespace Mirror.EX_A
     {
         public Text textValue;
         public Text textTick;
+        public InputField inputFieldPlayerName;
         public Button btnModify;
         public Button btnStart;
         public Button btnPause;

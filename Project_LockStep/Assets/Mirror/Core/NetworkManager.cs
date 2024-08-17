@@ -1284,7 +1284,7 @@ namespace Mirror
         //   Disconnect() -> ask Transport -> Transport.OnDisconnected -> Cleanup
         void OnClientDisconnectInternal()
         {
-            //Debug.Log("NetworkManager.OnClientDisconnectInternal");
+            Debug.Log("NetworkManager.OnClientDisconnectInternal");
 
             // Only let this run once. StopClient in Host mode changes to ServerOnly
             if (mode == NetworkManagerMode.ServerOnly || mode == NetworkManagerMode.Offline)

@@ -26,15 +26,36 @@ namespace Mirror.EX_A
 
         public void SetupClient()
         {
-            NetworkClient.RegisterHandler<Msg_Join_Rsp>(OnJoinRsp);
+            NetworkClient.RegisterHandler<Msg_PlayerConnect_Rsp>(OnPlayerConnectRsp);
+            NetworkClient.RegisterHandler<Msg_PlayerIdentify_Rsp>(OnPlayerIdentifyRsp);
+            NetworkClient.RegisterHandler<Msg_ClientWillDisconnect_Rsp>(OnClientWillDisconnectRsp);
+
             NetworkClient.RegisterHandler<Msg_Join_Ntf>(OnJoinNtf);
             NetworkClient.RegisterHandler<Msg_BattleStart_Rsp>(OnBattleStart);
             NetworkClient.RegisterHandler<Msg_Command_Ntf>(OnCommandNtf);
         }
 
-        private void OnJoinRsp(Msg_Join_Rsp msg)
+        private void OnPlayerConnectRsp(Msg_PlayerConnect_Rsp msg)
         {
-            GameHelper_Common.UILog($"Client: OnPlayerJoinRsp:{msg.playerId}");
+            GameHelper_Common.UILog($"Client: OnPlayerConnectRsp");
+
+            Msg_PlayerIdentify_Req msgIdentify = new()
+            {
+                playerName = GameHelper_Client.GetLocalPlayerName(),
+            };
+            NetworkClient.Send(msgIdentify);
+        }
+
+        private void OnPlayerIdentifyRsp(Msg_PlayerIdentify_Rsp msg)
+        {
+            GameHelper_Common.UILog($"Client: OnPlayerIdentifyRsp playerId:{msg.playerId}");
+        }
+
+        private void OnClientWillDisconnectRsp(Msg_ClientWillDisconnect_Rsp msg)
+        {
+            GameHelper_Common.UILog($"Client: WillDisconnect");
+
+            NetworkClient.Disconnect();
         }
 
         private void OnJoinNtf(Msg_Join_Ntf msg)

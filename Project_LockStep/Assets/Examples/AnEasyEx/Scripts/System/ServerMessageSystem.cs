@@ -22,6 +22,7 @@ namespace Mirror.EX_A
         /// </summary>
         public void RegisterMessageHandler()
         {
+            NetworkServer.RegisterHandler<Msg_PlayerIdentify_Req>(OnPlayerIdentifyReq);
             NetworkServer.RegisterHandler<Msg_BattleStart_Req>(OnBattleStartReq);
             NetworkServer.RegisterHandler<Msg_BattlePause_Req>(OnBattlePauseReq);
             NetworkServer.RegisterHandler<Msg_BattleResume_Req>(OnBattleResumeReq);
@@ -29,6 +30,18 @@ namespace Mirror.EX_A
         }
 
         #region 消息回调
+
+        private void OnPlayerIdentifyReq(NetworkConnectionToClient conn, Msg_PlayerIdentify_Req msg)
+        {
+            var (eResult, playerId) = ServerPlayerSystem.Instance.TryAddPlayer(conn, msg.playerName);
+
+            Msg_PlayerIdentify_Rsp msgRsp = new()
+            {
+                result = eResult,
+                playerId = playerId
+            };
+            conn.Send(msgRsp);
+        }
 
         private void OnBattleStartReq(NetworkConnectionToClient conn, Msg_BattleStart_Req msg)
         {
@@ -58,7 +71,7 @@ namespace Mirror.EX_A
 
         private void OnCommandReq(NetworkConnectionToClient conn, Msg_Command_Req msg)
         {
-            var playerId = ServerPlayerSystem.Instance.GetPlayerIdByConnectionId(conn.connectionId);
+            var playerId = ServerPlayerSystem.Instance.GetPlayerIdByConnectionId(conn.identity.netId);
             if (playerId == 0) return;
 
             ServerCommandSyncSystem.Instance.CacheClientCommand(playerId, msg.eCommand);
