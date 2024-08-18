@@ -103,6 +103,14 @@ namespace Mirror.EX_A
     }
 
     /// <summary>
+    /// 同步战斗暂停状态
+    /// </summary>
+    public struct Msg_BattlePause_Rsp : NetworkMessage
+    {
+        public bool isPause; // 当前状态是否是暂停
+    }
+
+    /// <summary>
     /// 局内指令请求
     /// </summary>
     public struct Msg_Command_Req : NetworkMessage

@@ -115,11 +115,22 @@ namespace Mirror.EX_A
         private void OnBattlePauseReq(NetworkConnectionToClient conn, Msg_BattlePause_Req msg)
         {
             ServerTimerSystem.Instance.battlePause = true;
+            Msg_BattlePause_Rsp msgRsp = new()
+            {
+                isPause = true
+            };
+            NetworkServer.SendToAll(msgRsp);
         }
 
         private void OnBattleResumeReq(NetworkConnectionToClient conn, Msg_BattleResume_Req msg)
         {
             ServerTimerSystem.Instance.battlePause = false;
+
+            Msg_BattlePause_Rsp msgRsp = new()
+            {
+                isPause = false
+            };
+            NetworkServer.SendToAll(msgRsp);
         }
 
         private void OnCommandReq(NetworkConnectionToClient conn, Msg_Command_Req msg)

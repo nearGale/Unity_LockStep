@@ -45,6 +45,7 @@ namespace Mirror.EX_A
             NetworkClient.RegisterHandler<Msg_Join_Ntf>(OnJoinNtf);
             NetworkClient.RegisterHandler<Msg_BattleStart_Ntf>(OnBattleStart);
             NetworkClient.RegisterHandler<Msg_BattleStop_Ntf>(OnBattleStop);
+            NetworkClient.RegisterHandler<Msg_BattlePause_Rsp>(OnBattlePause);
 
             NetworkClient.RegisterHandler<Msg_Command_Ntf>(OnCommandNtf);
             NetworkClient.RegisterHandler<Msg_CommandAll_Rsp>(OnCommandAllRsp);
@@ -59,6 +60,7 @@ namespace Mirror.EX_A
             NetworkClient.UnregisterHandler<Msg_Join_Ntf>();
             NetworkClient.UnregisterHandler<Msg_BattleStart_Ntf>();
             NetworkClient.UnregisterHandler<Msg_BattleStop_Ntf>();
+            NetworkClient.UnregisterHandler<Msg_BattlePause_Rsp>();
 
             NetworkClient.UnregisterHandler<Msg_Command_Ntf>();
             NetworkClient.UnregisterHandler<Msg_CommandAll_Rsp>();
@@ -113,6 +115,11 @@ namespace Mirror.EX_A
             ClientFrameSyncSystem.Instance.BattleStop();
             ClientTimerSystem.Instance.BattleStop();
             ClientLogicSystem.Instance.BattleStop();
+        }
+
+        private void OnBattlePause(Msg_BattlePause_Rsp msg)
+        {
+            ClientRoomSystem.Instance.battlePause = msg.isPause;
         }
 
         // TODO: battleRoomId

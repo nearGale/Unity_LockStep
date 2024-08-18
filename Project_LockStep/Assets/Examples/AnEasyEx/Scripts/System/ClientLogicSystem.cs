@@ -49,7 +49,7 @@ namespace Mirror.EX_A
 
             if(clientTick - _lastProcessClientTick > 1)
             {
-                var err = "ERR!!!! ClientLogicSystem [clientTick - lastProcessTick > 1]!!!";
+                var err = $"ERR!!!! ClientLogicSystem [clientTick - lastProcessTick > 1] {clientTick} {_lastProcessClientTick}";
                 GameHelper_Common.UILog(err);
                 throw new Exception(err);
             }
@@ -59,6 +59,7 @@ namespace Mirror.EX_A
         private void ClearData()
         {
             val = 0;
+            _lastProcessClientTick = 0;
         }
 
         /// <summary>

@@ -9,18 +9,21 @@ namespace Mirror.EX_A
     {
         public Text textValue;
         public Text textTick;
+        public Text textState;
         public InputField inputFieldPlayerName;
-        public Button btnModify;
-        public Button btnStart;
+        public Button btnBattleStart;
+        public Button btnBattleStop;
         public Button btnPause;
         public Button btnResume;
+        public Button btnModify;
 
         private void Start()
         {
-            btnModify.onClick.AddListener(OnBtnModifyClick);
-            btnStart.onClick.AddListener(OnBtnStartClick);
+            btnBattleStart.onClick.AddListener(OnBtnBattleStartClick);
+            btnBattleStop.onClick.AddListener(OnBtnBattleStopClick);
             btnPause.onClick.AddListener(OnBtnPauseClick);
             btnResume.onClick.AddListener(OnBtnResumeClick);
+            btnModify.onClick.AddListener(OnBtnModifyClick);
         }
 
         private void Update()
@@ -32,11 +35,25 @@ namespace Mirror.EX_A
             var ct = GameHelper_Client.GetClientTick();
             var st = GameHelper_Client.GetBattleServerTick();
             textTick.text = $"client:{ct} \n server:{st} \n delta:{st - ct}";
+
+            var clientInRoomState = ClientRoomSystem.Instance.GetClientInRoomState();
+
+            textState.text = $"连接状态:{clientInRoomState} ";
+            if(clientInRoomState == ERoomState.InBattle)
+            {
+                textState.text += "\n" + $"暂停状态:{ClientRoomSystem.Instance.battlePause}";
+            }
         }
 
-        public void OnBtnStartClick()
+        public void OnBtnBattleStartClick()
         {
             Msg_BattleStart_Req msg = new Msg_BattleStart_Req();
+            NetworkClient.Send(msg);
+        }
+
+        public void OnBtnBattleStopClick()
+        {
+            Msg_BattleStop_Req msg = new Msg_BattleStop_Req();
             NetworkClient.Send(msg);
         }
 

@@ -21,7 +21,7 @@ namespace Mirror.EX_A
         private ERoomState _eRoomState;
 
         /// <summary> 战斗房间是否暂停 </summary>
-        public bool battlePause; // TODO: 接协议实现
+        public bool battlePause;
 
         /// <summary> 在服务器中的 playerId（本次服务器启动时） </summary>
         public uint playerId;
@@ -95,6 +95,15 @@ namespace Mirror.EX_A
         public bool IsBattleRoomRunning()
         {
             return _eRoomState == ERoomState.InBattle && !battlePause;
+        }
+
+        /// <summary>
+        /// 拿到服务器连接的状态
+        /// </summary>
+        /// <returns></returns>
+        public ERoomState GetClientInRoomState()
+        {
+            return _eRoomState;
         }
     }
 }
