@@ -7,12 +7,22 @@ namespace Mirror.EX_A
     /// <summary>
     /// 此处放置 客户端 同步帧数据，当帧模拟
     /// </summary>
-    public class ClientFrameSyncSystem : Singleton<ClientFrameSyncSystem>, ISystem
+    public class ClientFrameSyncSystem : Singleton<ClientFrameSyncSystem>, IClientSystem
     {
         /// <summary>
         /// 字典：帧 -> 这一帧的指令集合
         /// </summary>
         public Dictionary<ulong, oneFrameCommands> frameCommandDict = new();
+
+        #region system func
+        public void OnClientConnect()
+        {
+        }
+
+        public void OnClientDisconnect()
+        {
+            ClearData();
+        }
 
         public void Start()
         {
@@ -26,17 +36,29 @@ namespace Mirror.EX_A
         {
             ProcessTick();
         }
+        #endregion
 
-        /// <summary>
-        /// 进入战斗房间时
-        /// </summary>
-        public void BattleStart()
+        private void ClearData()
         {
             frameCommandDict.Clear();
         }
 
-        // TODO: tick 出 command 逻辑拆出
-        // TODO: 同步随机数
+        /// <summary>
+        /// 战斗房间开始时
+        /// </summary>
+        public void BattleStart()
+        {
+            ClearData();
+        }
+
+        /// <summary>
+        /// 战斗房间结束时
+        /// </summary>
+        public void BattleStop()
+        {
+            ClearData();
+        }
+
         private void ProcessTick()
         {
             var clientTick = GameHelper_Client.GetClientTick();
@@ -53,12 +75,29 @@ namespace Mirror.EX_A
 
         public void OnSyncCommands(Msg_Command_Ntf msg)
         {
+            ClientTimerSystem.Instance.battleServerTick = msg.curBattleServerTick;
+            DoSyncCommand(msg.curBattleServerTick, msg.commandsSet);
+        }
+
+        public void OnSyncCommandsAll(Msg_CommandAll_Rsp msg)
+        {
+
+            ClientTimerSystem.Instance.battleServerTick = msg.syncedBattleServerTick;
+            DoSyncCommand(msg.syncedBattleServerTick, msg.commandsSet);
+        }
+
+        /// <summary>
+        /// 将同步指令存下
+        /// </summary>
+        /// <param name="curBattleServerTick">同步到的战斗服务器最大帧</param>
+        /// <param name="commandsSet">指令集合</param>
+        private void DoSyncCommand(ulong curBattleServerTick, List<oneFrameCommands> commandsSet)
+        {
             //GameHelper_Common.UILog($"Client: Rcv: {clientTick} {Time.time}");
 
             var clientTick = GameHelper_Client.GetClientTick();
 
-            ClientTimerSystem.Instance.battleServerTick = msg.curBattleServerTick;
-            foreach (var command in msg.commandsSet) // command 是一帧的指令集合
+            foreach (var command in commandsSet) // command 是一帧的指令集合
             {
                 GameHelper_Common.UILog($"Client: Rcv: {command.serverTick} at {clientTick}/{GameHelper_Client.GetBattleServerTick()}");
                 if (!frameCommandDict.ContainsKey(command.serverTick))

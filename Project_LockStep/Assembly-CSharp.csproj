@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerTimerSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerCommandStorageSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\Singleton.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameFacade.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientFrameSyncSystem.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\StringExtension.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientLogicSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ISystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\ConstVaiables.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\ConstVariables.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\UI\EX_A_TextLog.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\EX_A_Player.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerMessageSystem.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\BattleRoom.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerCommandSyncSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientTimerSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\Player.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientRandomSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\UI\EX_A_Button.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\UI\EX_A_PlayerPanel.cs" />
@@ -84,7 +86,8 @@
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientMessageSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Server\BattleSever.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerLogicSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\Player.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\FrameChasing.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientChasingFrameSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />
@@ -367,6 +370,12 @@
     </Reference>
     <Reference Include="Mono.CecilX.Mdb">
       <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Android.Types">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Android.Gradle">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>

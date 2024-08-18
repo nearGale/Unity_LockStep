@@ -29,7 +29,7 @@ namespace Mirror.EX_A
         public NetworkIdentity netIdentity;
     }
 
-    public class ServerPlayerSystem : Singleton<ServerPlayerSystem>, ISystem
+    public class ServerPlayerSystem : Singleton<ServerPlayerSystem>, IServerSystem
     {
         /// <summary> playerId 生成号 </summary>
         private uint _playerIndex = 0;
@@ -49,6 +49,24 @@ namespace Mirror.EX_A
         /// </summary>
         public Dictionary<uint, ServerPlayerInfo> playerNetId2Info = new();
 
+        #region system func
+
+        public void OnStartServer()
+        {
+            _playerIndex = 0;
+            playerId2Info.Clear();
+            playerName2Info.Clear();
+            playerNetId2Info.Clear();
+        }
+
+        public void OnStopServer()
+        {
+            _playerIndex = 0;
+            playerId2Info.Clear();
+            playerName2Info.Clear();
+            playerNetId2Info.Clear();
+        }
+
         public void Start()
         {
         }
@@ -60,6 +78,8 @@ namespace Mirror.EX_A
         public void LogicUpdate()
         {
         }
+
+        #endregion
 
         /// <summary>
         /// 尝试创建玩家，缓存玩家的id、与playerId、netIdentity的映射关系
@@ -93,7 +113,8 @@ namespace Mirror.EX_A
 
                 // B:
                 RefreshPlayerInfoCache(conn, elderPlayerInfo, elderNetId);
-                return (EIdentifyResult.Succeed, elderPlayerInfo.playerId);
+
+                return (EIdentifyResult.Replace, elderPlayerInfo.playerId);
             }
             else
             {
@@ -118,7 +139,7 @@ namespace Mirror.EX_A
         /// <param name="netId">网络连接的 id</param>
         public uint GetPlayerIdByConnectionId(uint netId)
         {
-            if (!playerNetId2Info.TryGetValue(netId, out var playerInfo) && playerInfo != null)
+            if (playerNetId2Info.TryGetValue(netId, out var playerInfo) && playerInfo != null)
             {
                 return playerInfo.playerId;
             }

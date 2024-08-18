@@ -26,16 +26,6 @@ namespace Mirror.EX_A
             // 验证通过：
             //    => 广播给所有人，有新人登录服务器 Msg_Join_Ntf
 
-
-
-            //var ids = ServerPlayerSystem.Instance.playerDict.Keys.ToList();
-            //Msg_Join_Ntf msg = new Msg_Join_Ntf()
-            //{
-            //    playerIds = ids
-            //};
-
-            //NetworkServer.SendToAll(msg);
-            //GameHelper_Common.UILog($"Server: DoPlayerJoinNtf:{ids.GetString()}");
         }
         #endregion
     }

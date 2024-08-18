@@ -7,6 +7,7 @@ namespace Mirror.EX_A
     [AddComponentMenu("")]
     public class EX_A_NetworkMgr : NetworkManager
     {
+        #region server func
         /// <summary>
         /// Called on the server when a client adds a new player with NetworkClient.AddPlayer.
         /// <para>The default implementation for this function creates a new player object from the playerPrefab.</para>
@@ -34,12 +35,57 @@ namespace Mirror.EX_A
             base.OnStartServer();
             GameFacade.isServer = true;
 
-            ServerMessageSystem.Instance.RegisterMessageHandler();
+            foreach (var system in GameFacade.serverSystems)
+            {
+                system.OnStartServer();
+            }
         }
 
+        public override void OnStopServer()
+        {
+            base.OnStopServer();
+            GameFacade.isServer = false;
+
+            foreach (var system in GameFacade.serverSystems)
+            {
+                system.OnStopServer();
+            }
+        }
+
+        #endregion
+
+
+        #region client func
         public override void OnStartClient()
         {
-            ClientMessageSystem.Instance.SetupClient();
         }
+
+        /// <summary>
+        /// 客户端处调用，当连接到服务器时
+        /// </summary>
+        public override void OnClientConnect()
+        {
+            base.OnClientConnect();
+
+            foreach (var system in GameFacade.clientSystems)
+            {
+                system.OnClientConnect();
+            }
+        }
+
+        /// <summary>
+        /// 客户端处调用，当连接断开时
+        /// </summary>
+        public override void OnClientDisconnect()
+        {
+            base.OnClientDisconnect();
+
+            foreach (var system in GameFacade.clientSystems)
+            {
+                system.OnClientDisconnect();
+            }
+        }
+
+        #endregion
     }
 }

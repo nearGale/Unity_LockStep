@@ -24,11 +24,23 @@ namespace Mirror.EX_A
         {
         }
 
+        /// <summary>
+        /// 进入战斗房间时
+        /// </summary>
+        /// <param name="seed">随机数种子</param>
         public void BattleStart(int seed)
         {
             randomSeed = seed;
             Random.InitState(seed);
             GameHelper_Common.UILog($"RandomSeed:{seed}");
+        }
+
+        /// <summary>
+        /// 战斗房间结束时
+        /// </summary>
+        public void BattleStop()
+        {
+            randomSeed = 0;
         }
 
         public int GetRandomInt(int min, int max)

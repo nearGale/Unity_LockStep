@@ -27,6 +27,7 @@ namespace Mirror.EX_A
     {
         Succeed,
         Failed,
+        Replace, // 验证通过，有之前登录过的账号，把它顶掉了
     }
 
     /// <summary>
@@ -65,9 +66,24 @@ namespace Mirror.EX_A
     /// <summary>
     /// 战斗开始回包
     /// </summary>
-    public struct Msg_BattleStart_Rsp : NetworkMessage
+    public struct Msg_BattleStart_Ntf : NetworkMessage
     {
         public int randomSeed;
+    }
+
+    /// <summary>
+    /// 战斗结束请求
+    /// </summary>
+    public struct Msg_BattleStop_Req : NetworkMessage 
+    {
+
+    }
+
+    /// <summary>
+    /// 战斗结束回包
+    /// </summary>
+    public struct Msg_BattleStop_Ntf : NetworkMessage
+    {
     }
 
     /// <summary>
@@ -112,12 +128,13 @@ namespace Mirror.EX_A
     {
         /// <summary> 帧号 </summary>
         public ulong serverTick;
+
         /// <summary> 这帧里的指令集合 </summary>
         public List<CommandDetail> details;
     }
 
     /// <summary>
-    /// 多帧指令集合下发
+    /// 多帧指令集合下发（正常同步）
     /// </summary>
     public struct Msg_Command_Ntf : NetworkMessage
     {
@@ -125,4 +142,17 @@ namespace Mirror.EX_A
         /// <summary> 拥有多帧的指令集合 </summary>
         public List<oneFrameCommands> commandsSet;
     }
+
+    /// <summary>
+    /// 多帧指令集合下发（全量同步，用于断线重连）
+    /// </summary>
+    public struct Msg_CommandAll_Rsp : NetworkMessage
+    {
+        /// <summary> 同步包的最大帧，非服务器最大帧 </summary>
+        public ulong syncedBattleServerTick;
+
+        /// <summary> 拥有多帧的指令集合 </summary>
+        public List<oneFrameCommands> commandsSet;
+    }
+
 }

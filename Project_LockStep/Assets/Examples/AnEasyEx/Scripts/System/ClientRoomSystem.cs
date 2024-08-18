@@ -1,24 +1,44 @@
+using Edgegap;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mirror.EX_A
 {
+    public enum ERoomState
+    {
+        UnConnected,
+        Lobby,
+        InBattle,
+    }
+
     /// <summary>
     /// 此处放置 客户端 运行逻辑
     /// </summary>
-    public class ClientRoomSystem : Singleton<ClientRoomSystem>, ISystem
+    public class ClientRoomSystem : Singleton<ClientRoomSystem>, IClientSystem
     {
-        /// <summary>
-        /// 是否在战斗房间内
-        /// </summary>
-        public bool inBattle;
+        /// <summary> 在服务器中的房间状态 </summary>
+        private ERoomState _eRoomState;
 
         /// <summary> 战斗房间是否暂停 </summary>
         public bool battlePause; // TODO: 接协议实现
 
+        /// <summary> 在服务器中的 playerId（本次服务器启动时） </summary>
+        public uint playerId;
+
+        #region system func
+        public void OnClientConnect()
+        {
+        }
+
+        public void OnClientDisconnect()
+        {
+            ClearData();
+        }
+
         public void Start()
         {
+            _eRoomState = ERoomState.UnConnected;
         }
 
         public void Update()
@@ -28,14 +48,43 @@ namespace Mirror.EX_A
         public void LogicUpdate()
         {
         }
+        #endregion
+
+        private void ClearData()
+        {
+            _eRoomState = ERoomState.UnConnected;
+            battlePause = false;
+            playerId = 0;
+        }
+
+        /// <summary>
+        /// 服务器 id 验证后
+        /// </summary>
+        public void OnPlayerIdentified(Msg_PlayerIdentify_Rsp msg)
+        {
+            if (msg.result == EIdentifyResult.Failed) // failed 会进入断开连接流程，在流程中把 roomState 设为 unConnected
+                return;
+
+            playerId = msg.playerId;
+            _eRoomState = ERoomState.Lobby;
+        }
 
         /// <summary>
         /// 进入战斗房间时
         /// </summary>
         public void BattleStart()
         {
-            inBattle = true;
-            // TODO: 出战斗房间
+            _eRoomState = ERoomState.InBattle;
+
+            battlePause = false;
+        }
+
+        /// <summary>
+        /// 战斗房间结束时
+        /// </summary>
+        public void BattleStop()
+        {
+            _eRoomState = ERoomState.Lobby;
 
             battlePause = false;
         }
@@ -45,8 +94,7 @@ namespace Mirror.EX_A
         /// </summary>
         public bool IsBattleRoomRunning()
         {
-            // TODO: 连接着服务器
-            return inBattle && !battlePause;
+            return _eRoomState == ERoomState.InBattle && !battlePause;
         }
     }
 }

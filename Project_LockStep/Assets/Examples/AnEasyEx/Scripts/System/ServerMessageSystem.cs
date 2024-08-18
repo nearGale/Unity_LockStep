@@ -1,21 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utils.Extensions;
 
 namespace Mirror.EX_A
 {
     /// <summary>
     /// 服务端消息处理
     /// </summary>
-    public class ServerMessageSystem : Singleton<ServerMessageSystem>, ISystem
+    public class ServerMessageSystem : Singleton<ServerMessageSystem>, IServerSystem
     {
+        #region system func
+
+        public void OnStartServer()
+        {
+            RegisterMessageHandler();
+        }
+
+        public void OnStopServer()
+        {
+            UnRegisterMessageHandler();
+        }
 
         public void Start() { }
 
         public void Update() { }
 
         public void LogicUpdate() { }
+
+        #endregion
 
         /// <summary>
         /// 注册消息回调
@@ -24,9 +39,22 @@ namespace Mirror.EX_A
         {
             NetworkServer.RegisterHandler<Msg_PlayerIdentify_Req>(OnPlayerIdentifyReq);
             NetworkServer.RegisterHandler<Msg_BattleStart_Req>(OnBattleStartReq);
+            NetworkServer.RegisterHandler<Msg_BattleStop_Req>(OnBattleStopReq);
+
             NetworkServer.RegisterHandler<Msg_BattlePause_Req>(OnBattlePauseReq);
             NetworkServer.RegisterHandler<Msg_BattleResume_Req>(OnBattleResumeReq);
             NetworkServer.RegisterHandler<Msg_Command_Req>(OnCommandReq);
+        }
+
+        public void UnRegisterMessageHandler()
+        {
+            NetworkServer.UnregisterHandler<Msg_PlayerIdentify_Req>();
+            NetworkServer.UnregisterHandler<Msg_BattleStart_Req>();
+            NetworkServer.UnregisterHandler<Msg_BattleStop_Req>();
+
+            NetworkServer.UnregisterHandler<Msg_BattlePause_Req>();
+            NetworkServer.UnregisterHandler<Msg_BattleResume_Req>();
+            NetworkServer.UnregisterHandler<Msg_Command_Req>();
         }
 
         #region 消息回调
@@ -41,22 +69,47 @@ namespace Mirror.EX_A
                 playerId = playerId
             };
             conn.Send(msgRsp);
+
+            if (eResult == EIdentifyResult.Failed) return;
+
+            // 如果在战斗中，向客户端同步所有消息
+            if (GameHelper_Server.IsInBattleRoom())
+            {
+                GameHelper_Server.NotifyBattleStart(conn);
+                ServerCommandStorageSystem.Instance.SyncAllCommands(conn);
+            }
+
+            var ids = ServerPlayerSystem.Instance.playerId2Info.Keys.ToList();
+            Msg_Join_Ntf msgNtf = new Msg_Join_Ntf()
+            {
+                playerIds = ids
+            };
+
+            NetworkServer.SendToAll(msgNtf);
+            GameHelper_Common.UILog($"Server: DoPlayerJoinNtf:{ids.GetString()}");
         }
 
         private void OnBattleStartReq(NetworkConnectionToClient conn, Msg_BattleStart_Req msg)
         {
-            ServerLogicSystem.Instance.isInBattleRoom = true;
-            ServerTimerSystem.Instance.battleServerTick = 0;
-            ServerTimerSystem.Instance.battlePause = false;
-            ServerCommandSyncSystem.Instance.StartBattle();
+            if (ServerLogicSystem.Instance.eRoomState == EServerRoomState.InBattle)
+                return;
 
-            var gameServerTick = GameHelper_Server.GetGameServerTick();
-            var seed = (int)(gameServerTick % 100);
-            Msg_BattleStart_Rsp msgRsp = new Msg_BattleStart_Rsp()
-            {
-                randomSeed = seed,
-            };
-            NetworkServer.SendToAll(msgRsp);
+            ServerTimerSystem.Instance.StartBattle();
+            ServerCommandStorageSystem.Instance.StartBattle();
+            ServerCommandSyncSystem.Instance.StartBattle();
+            ServerLogicSystem.Instance.StartBattle();
+
+            GameHelper_Server.NotifyBattleStart();
+        }
+
+        private void OnBattleStopReq(NetworkConnectionToClient conn, Msg_BattleStop_Req msg)
+        {
+            ServerTimerSystem.Instance.StopBattle();
+            ServerCommandStorageSystem.Instance.StopBattle();
+            ServerCommandSyncSystem.Instance.StopBattle();
+            ServerLogicSystem.Instance.StopBattle();
+
+            GameHelper_Server.NotifyBattleStop();
         }
 
         private void OnBattlePauseReq(NetworkConnectionToClient conn, Msg_BattlePause_Req msg)

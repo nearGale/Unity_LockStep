@@ -7,27 +7,16 @@ namespace Mirror.EX_A
 {
     public class EX_A_Entry: MonoBehaviour
     {
-        List<ISystem> systems = new()
-        {
-            // 服务器逻辑
-            ServerTimerSystem.Instance,
-            ServerMessageSystem.Instance,
-            ServerLogicSystem.Instance,
-            ServerCommandSyncSystem.Instance,
-
-            // 客户端逻辑
-            ClientMessageSystem.Instance,
-            ClientRoomSystem.Instance,
-            ClientFrameSyncSystem.Instance,
-            ClientLogicSystem.Instance,
-            ClientTimerSystem.Instance,
-        };
-
         void Start()
         {
             GameFacade.isServer = false;
 
-            foreach(var system in systems)
+            foreach (var system in GameFacade.serverSystems)
+            {
+                system.Start();
+            }
+
+            foreach (var system in GameFacade.clientSystems)
             {
                 system.Start();
             }
@@ -35,7 +24,15 @@ namespace Mirror.EX_A
 
         void Update()
         {
-            foreach (var system in systems)
+            if (GameFacade.isServer)
+            {
+                foreach (var system in GameFacade.serverSystems)
+                {
+                    system.Update();
+                }
+            }
+
+            foreach (var system in GameFacade.clientSystems)
             {
                 system.Update();
             }
@@ -43,7 +40,15 @@ namespace Mirror.EX_A
 
         private void FixedUpdate()
         {
-            foreach (var system in systems)
+            if (GameFacade.isServer)
+            {
+                foreach (var system in GameFacade.serverSystems)
+                {
+                    system.LogicUpdate();
+                }
+            }
+
+            foreach (var system in GameFacade.clientSystems)
             {
                 system.LogicUpdate();
             }
