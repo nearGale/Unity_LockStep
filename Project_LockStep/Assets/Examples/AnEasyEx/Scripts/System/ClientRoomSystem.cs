@@ -63,7 +63,9 @@ namespace Mirror.EX_A
         public void OnPlayerIdentified(Msg_PlayerIdentify_Rsp msg)
         {
             if (msg.result == EIdentifyResult.Failed) // failed 会进入断开连接流程，在流程中把 roomState 设为 unConnected
+            {
                 return;
+            }
 
             playerId = msg.playerId;
             _eRoomState = ERoomState.Lobby;
@@ -77,6 +79,13 @@ namespace Mirror.EX_A
             _eRoomState = ERoomState.InBattle;
 
             battlePause = false;
+
+            if (GameFacade.enableCommandSnapshot)
+            {
+                var logStr = $"[BattleStart] " +
+                    $"{GameHelper_Client.GetLocalPlayerName()}";
+                GameHelper_Common.FileLog(GameFacade.commandSnapshotLogName, logStr);
+            }
         }
 
         /// <summary>

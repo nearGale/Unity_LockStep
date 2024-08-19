@@ -70,11 +70,20 @@ namespace Mirror.EX_A
         {
             GameHelper_Common.UILog($"Client: OnPlayerConnectRsp");
 
-            Msg_PlayerIdentify_Req msgIdentify = new()
+            var name = GameHelper_Client.GetLocalPlayerName();
+            if(!name.IsNullOrEmpty())
             {
-                playerName = GameHelper_Client.GetLocalPlayerName(),
-            };
-            NetworkClient.Send(msgIdentify);
+                Msg_PlayerIdentify_Req msgIdentify = new()
+                {
+                    playerName = GameHelper_Client.GetLocalPlayerName(),
+                };
+                NetworkClient.Send(msgIdentify);
+            }
+            else
+            {
+                NetworkClient.Disconnect();
+                GameHelper_Common.UILog("ERR!!! Can't Req Identify: no player name!");
+            }
         }
 
         private void OnPlayerIdentifyRsp(Msg_PlayerIdentify_Rsp msg)

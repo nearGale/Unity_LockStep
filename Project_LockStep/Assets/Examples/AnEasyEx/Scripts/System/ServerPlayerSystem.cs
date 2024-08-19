@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utils.Extensions;
 
 namespace Mirror.EX_A
 {
@@ -91,6 +92,11 @@ namespace Mirror.EX_A
         /// <returns></returns>
         public (EIdentifyResult, uint) TryAddPlayer(NetworkConnectionToClient conn, string playerName)
         {
+            if (playerName.IsNullOrEmpty())
+            {
+                return (EIdentifyResult.Failed, 0);
+            }
+
             var netIdentity = conn.identity;
             GameHelper_Common.UILog($"Server: TryAddPlayer: {playerName} netId:{netIdentity.netId}");
 

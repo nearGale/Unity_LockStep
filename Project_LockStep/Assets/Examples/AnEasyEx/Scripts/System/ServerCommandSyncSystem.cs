@@ -15,10 +15,15 @@ namespace Mirror.EX_A
         private ulong _lastSyncedFrame = 0;
 
         /// <summary>
-        /// 在这一帧的持续时间中，收到的指令，在下一帧的 LogicUpdate 中，缓存下来
+        /// 在这一帧的持续时间中，收到的指令，在进入下一帧后，缓存下来
         /// 保证和 timerSystem 的时序
         /// </summary>
         private List<CommandDetail> _cachedCommandThisFrame = new();
+
+        /// <summary>
+        /// 监听帧号变更
+        /// </summary>
+        private ulong _lastFrameTick = 0;
 
         /// <summary>
         /// 缓存了从上次同步到下次同步之间的帧指令
@@ -29,6 +34,7 @@ namespace Mirror.EX_A
         /// kvPair.value 已池化，清空使用：ClearCommandsAndRecycle()
         /// </summary>
         private Dictionary<ulong, List<CommandDetail>> _cachedCommands = new();
+
 
 
         #region system func
@@ -120,9 +126,13 @@ namespace Mirror.EX_A
         /// </summary>
         private void MoveLastFrameCommandsIntoNtfList()
         {
+            var battleServerTick = GameHelper_Server.GetBattleServerTick();
+
+            if (_lastFrameTick == battleServerTick) return; // 进入下一帧后才移入缓存中
+            _lastFrameTick = battleServerTick;
+
             if (_cachedCommandThisFrame.Count == 0) return;
 
-            var battleServerTick = GameHelper_Server.GetBattleServerTick();
             if (_cachedCommands.ContainsKey(battleServerTick))
             {
                 var err = $"ERR!!!! ServerCommandSyncSystem has servertick:{battleServerTick} already!!!";
@@ -177,8 +187,8 @@ namespace Mirror.EX_A
             if (lst.Count > 0)
             {
                 frames.Sort();
-                GameHelper_Common.UILog($"Server: SyncCommands at {battleServerTick} frames:{frames.GetString()}");
             }
+            GameHelper_Common.UILog($"Server: SyncCommands at {battleServerTick} frames:[{frames.GetString()}]");
 
             lst.RecycleListToPool();
             frames.RecycleListToPool();

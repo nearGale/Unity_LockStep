@@ -24,7 +24,7 @@ namespace Mirror.EX_A
             // 服务器端专属
             //     OnStartServer()
             //     OnStopServer()
-
+            
             ServerTimerSystem.Instance,
             ServerPlayerSystem.Instance,
             ServerMessageSystem.Instance,
@@ -47,9 +47,9 @@ namespace Mirror.EX_A
             // ==================================
             // 战斗中系统，加速追帧就跑这几个系统
             // 追帧：GameHelper_Client.ChasingOneFrame()
-            ClientFrameSyncSystem.Instance,
-            ClientLogicSystem.Instance,
-            ClientTimerSystem.Instance,
+            ClientFrameSyncSystem.Instance, // 执行指令
+            ClientLogicSystem.Instance, // 逻辑更新
+            ClientTimerSystem.Instance, // 帧数更新
             // ==================================
 
             ClientChasingFrameSystem.Instance,
@@ -71,5 +71,10 @@ namespace Mirror.EX_A
         /// 报错内容文件，存储路径
         /// </summary>
         public static string exceptionLogName = "exception";
+
+        /// <summary>
+        /// log文件，存储路径
+        /// </summary>
+        public static string normalLogName = "normal";
     }
 }

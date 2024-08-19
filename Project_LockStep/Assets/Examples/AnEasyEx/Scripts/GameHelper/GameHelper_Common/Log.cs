@@ -11,6 +11,7 @@ namespace Mirror.EX_A
         public static void UILog(string str)
         {
             EX_A_TextLog.instance.AppendLog(str);
+            FileLog(GameFacade.normalLogName, str);
         }
 
         public static void UIErr(string str)

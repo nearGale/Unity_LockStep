@@ -70,7 +70,12 @@ namespace Mirror.EX_A
             };
             conn.Send(msgRsp);
 
-            if (eResult == EIdentifyResult.Failed) return;
+            if (eResult == EIdentifyResult.Failed)
+            {
+                Msg_ClientWillDisconnect_Rsp msgDisconnect = new();
+                conn.Send(msgDisconnect);
+                return;
+            }
 
             // 如果在战斗中，向客户端同步所有消息
             if (GameHelper_Server.IsInBattleRoom())

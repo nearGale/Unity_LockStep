@@ -93,6 +93,8 @@ namespace Mirror.EX_A
         {
             clientTick++;
             _lastTickTime = Time.time;
+
+            GameHelper_Common.FileLog(GameFacade.commandSnapshotLogName, $"ClientTickGrow: clientTick:{clientTick} serverTick:{battleServerTick}");
         }
     }
 }

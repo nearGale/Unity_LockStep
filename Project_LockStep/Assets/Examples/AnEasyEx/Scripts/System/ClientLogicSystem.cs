@@ -12,7 +12,7 @@ namespace Mirror.EX_A
     public class ClientLogicSystem : Singleton<ClientLogicSystem>, IClientSystem
     {
         /// <summary> 一个测试用例，用于计算帧同步的结果 </summary>
-        public int val;
+        public Int64 val;
 
         /// <summary> 
         /// 上一次执行时的客户端逻辑帧号，变大了才执行下一次
@@ -90,25 +90,18 @@ namespace Mirror.EX_A
             {
                 case ECommand.Modify:
                     var mode = ClientRandomSystem.Instance.GetRandomInt(0, 4);
-                    var param = ClientRandomSystem.Instance.GetRandomInt(1, 50);
+                    var param = ClientRandomSystem.Instance.GetRandomInt(2, 15);
                     switch (mode)
                     {
                         case 0:
-                            // Add
-                            val += param;
-                            break;
                         case 1:
-                            // Subtract
-                            val -= param;
-                            break;
                         case 2:
                             // Multiply
                             val *= param;
                             break;
                         case 3:
                             // Divide
-                            var devideParam = ClientRandomSystem.Instance.GetRandomInt(2, 5);
-                            val = (int)((float)val / devideParam);
+                            val = (int)((float)val / param);
                             break;
                     }
                     break;

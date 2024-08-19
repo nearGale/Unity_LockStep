@@ -77,6 +77,11 @@ namespace Mirror.EX_A
         {
             ClientTimerSystem.Instance.battleServerTick = msg.curBattleServerTick;
             DoSyncCommand(msg.curBattleServerTick, msg.commandsSet);
+
+            if (GameFacade.enableCommandSnapshot)
+            {
+                GameHelper_Common.FileLog(GameFacade.commandSnapshotLogName, $"OnSyncCommands serverTick:{msg.curBattleServerTick}");
+            }
         }
 
         public void OnSyncCommandsAll(Msg_CommandAll_Rsp msg)
@@ -84,6 +89,11 @@ namespace Mirror.EX_A
 
             ClientTimerSystem.Instance.battleServerTick = msg.syncedBattleServerTick;
             DoSyncCommand(msg.syncedBattleServerTick, msg.commandsSet);
+
+            if (GameFacade.enableCommandSnapshot)
+            {
+                GameHelper_Common.FileLog(GameFacade.commandSnapshotLogName, $"OnSyncCommandsAll serverTick:{msg.syncedBattleServerTick}");
+            }
         }
 
         /// <summary>
