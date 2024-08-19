@@ -120,7 +120,7 @@ namespace Mirror.EX_A
 
     public enum ECommand
     {
-        multi,
+        Modify,
     }
 
     public struct CommandDetail

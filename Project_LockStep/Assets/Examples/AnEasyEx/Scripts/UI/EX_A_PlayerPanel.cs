@@ -73,7 +73,7 @@ namespace Mirror.EX_A
         {
             Msg_Command_Req msg = new Msg_Command_Req()
             {
-                eCommand = ECommand.multi
+                eCommand = ECommand.Modify
             };
             NetworkClient.Send(msg);
         }

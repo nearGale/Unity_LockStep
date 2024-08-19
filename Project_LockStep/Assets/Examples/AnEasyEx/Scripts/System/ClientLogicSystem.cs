@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mirror.EX_A
@@ -87,8 +88,29 @@ namespace Mirror.EX_A
             
             switch (detail.eCommand)
             {
-                case ECommand.multi:
-                    val += ClientRandomSystem.Instance.GetRandomInt(50, 5000);
+                case ECommand.Modify:
+                    var mode = ClientRandomSystem.Instance.GetRandomInt(0, 4);
+                    var param = ClientRandomSystem.Instance.GetRandomInt(1, 50);
+                    switch (mode)
+                    {
+                        case 0:
+                            // Add
+                            val += param;
+                            break;
+                        case 1:
+                            // Subtract
+                            val -= param;
+                            break;
+                        case 2:
+                            // Multiply
+                            val *= param;
+                            break;
+                        case 3:
+                            // Divide
+                            var devideParam = ClientRandomSystem.Instance.GetRandomInt(2, 5);
+                            val = (int)((float)val / devideParam);
+                            break;
+                    }
                     break;
             }
 
