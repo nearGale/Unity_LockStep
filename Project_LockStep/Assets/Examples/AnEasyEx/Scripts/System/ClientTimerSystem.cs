@@ -84,7 +84,6 @@ namespace Mirror.EX_A
         public void ClientTickGrow(bool ignoreIntervalCheck)
         {
             var intervalPass = Time.time - _lastTickTime > ConstVariables.LogicFrameIntervalSeconds;
-            // TODO: intervalPass 由 (现在-开始) / 总帧数，判断整体的时间是否是可以进入下一帧（浮动计算）
             if (ignoreIntervalCheck || intervalPass)
             {
                 clientTick++;
