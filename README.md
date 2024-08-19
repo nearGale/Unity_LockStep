@@ -7,7 +7,7 @@ Unity版本：2021.3.13f1
 ### 登陆验证
 同号登录会顶掉之前的客户端
 
-ServerPlayerSystem.TryAddPlayer()
+ServerPlayerSystem.TryAddPlayer()  
 
 
 ### 帧率控制
@@ -15,26 +15,26 @@ ServerPlayerSystem.TryAddPlayer()
 
 ServerTimerSystem
 
-ClientTimerSystem
+ClientTimerSystem  
 
 ### 指令同步
 每过多少帧进行一次指令集合广播：ConstVariables.CommandSetSyncIntervalFrames, 默认值：5
 
 ServerCommandSyncSystem.SyncCommands()
 
-ClientFrameSyncSystem.OnSyncCommands()
+ClientFrameSyncSystem.OnSyncCommands()  
 
 ### 加速追帧
 追帧时一秒追多少逻辑帧：ConstVariables.CommandChasingPerFrame, 默认值：100
 
 ClientChasingFrameSystem
 
-GameHelper_Client.ChasingOneFrame() : 这里跑一次逻辑帧的流程
+GameHelper_Client.ChasingOneFrame() : 这里跑一次逻辑帧的流程  
 
 ### 断线重连
 ServerCommandStorageSystem.SyncAllCommands()
 
-ClientFrameSyncSystem.OnSyncCommandsAll()
+ClientFrameSyncSystem.OnSyncCommandsAll()  
 
 ### 指令逻辑层快照
 功能开关：GameFacade.enableCommandSnapshot, 默认开
@@ -51,12 +51,20 @@ ClientFrameSyncSystem.OnSyncCommandsAll()
 可以用diff工具快速定位到不一致的位置
 
 ![image](https://github.com/user-attachments/assets/744b0c80-ee9b-4148-9105-ff047643a919)
-![image](https://github.com/user-attachments/assets/ad57e756-9ece-4c79-93fd-d6e14d3f0e8d)
+![image](https://github.com/user-attachments/assets/ad57e756-9ece-4c79-93fd-d6e14d3f0e8d)  
 
 
 ### GC控制
-过程中协议全部使用 struct，容器均已池化
+过程中协议全部使用 struct，容器均已池化  
 
+### 随机数同步
+同步种子，客户端随机生成结果相同
+
+⚠ 随机生成的次数需要多端一致，不能有单独的一个客户端调用，但其他客户端不调用的情况，后续就会对不上
+
+ServerLogicSystem.randomSeed
+
+ClientRandomSystem.randomSeed  
 
 ### TODO：
 同步全部指令时，控制包体大小、分包
