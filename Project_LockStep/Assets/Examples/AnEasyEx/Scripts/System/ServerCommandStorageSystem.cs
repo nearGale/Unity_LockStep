@@ -14,18 +14,19 @@ namespace Mirror.EX_A
         /// 缓存了从 第1帧 开始的指令，所有的指令
         /// 
         /// 字典：帧号 -> 这一帧的指令集合
+        /// kvPair.value : 已池化，清空使用：ClearCommandsAndRecycle()
         /// </summary>
         private Dictionary<ulong, List<CommandDetail>> _allCommands = new();
 
         #region system func
         public void OnStartServer()
         {
-            _allCommands.Clear();
+            ClearData();
         }
 
         public void OnStopServer()
         {
-            _allCommands.Clear();
+            ClearData();
         }
 
         public void Start()
@@ -42,12 +43,26 @@ namespace Mirror.EX_A
 
         #endregion
 
+        private void ClearData()
+        {
+            ClearCommandsAndRecycle();
+        }
+
+        private void ClearCommandsAndRecycle()
+        {
+            foreach (var kvPair in _allCommands)
+            {
+                kvPair.Value.RecycleListToPool();
+            }
+            _allCommands.Clear();
+        }
+
         /// <summary>
         /// 战斗房间开始时
         /// </summary>
         public void StartBattle()
         {
-            _allCommands.Clear();
+            ClearData();
         }
 
         /// <summary>
@@ -55,7 +70,7 @@ namespace Mirror.EX_A
         /// </summary>
         public void StopBattle()
         {
-            _allCommands.Clear();
+            ClearData();
         }
 
         /// <summary>
@@ -65,7 +80,10 @@ namespace Mirror.EX_A
         /// <param name="commands">这一帧的指令集合</param>
         public void StoreCommand(ulong frame, List<CommandDetail> commands)
         {
-            List<CommandDetail> cmd = new(commands); // TODO: 池化
+            List<CommandDetail> cmd = ObjectPool.Instance.Get<List<CommandDetail>>();
+            cmd.Clear();
+
+            cmd.AddRange(commands);
             _allCommands.Add(frame, cmd);
         }
 
@@ -76,9 +94,12 @@ namespace Mirror.EX_A
         public void SyncAllCommands(NetworkConnectionToClient conn)
         {
             var battleServerTick = GameHelper_Server.GetBattleServerTick();
-            List<oneFrameCommands> lst = new(); // TODO: 池化
+            List<oneFrameCommands> lst = ObjectPool.Instance.Get<List<oneFrameCommands>>();
+            lst.Clear();
 
-            List<ulong> frames = new(); // 缓存同步了哪些帧 TODO: 池化
+            List<ulong> frames = ObjectPool.Instance.Get<List<ulong>>(); // 缓存同步了哪些帧
+            frames.Clear();
+
             foreach (var kvPair in _allCommands)
             {
                 // key: 帧号 (ulong)
@@ -87,7 +108,7 @@ namespace Mirror.EX_A
                 frames.Add(kvPair.Key);
 
                 // 塞到协议中
-                List<CommandDetail> commandDetails = new(kvPair.Value); // 这里要看池化的时候，是不是需要新取一个引用，把原来的还进池里
+                List<CommandDetail> commandDetails = new(kvPair.Value); // CommandDetail 是 struct 值类型
                 oneFrameCommands cmd = new()
                 {
                     serverTick = kvPair.Key,
@@ -112,6 +133,9 @@ namespace Mirror.EX_A
             {
                 GameHelper_Common.UILog($"Server: SyncCommands_All at {battleServerTick} frames:0->{syncFrameMax} {frames.GetString()}");
             }
+
+            lst.RecycleListToPool();
+            frames.RecycleListToPool();
         }
     }
 }

@@ -57,11 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerTimerSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerCommandStorageSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\Singleton.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameFacade.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientFrameSyncSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\FixedPointNumber.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientRoomSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\EX_A_NetworkMgr.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\StringExtension.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientLogicSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\FrameChasing.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ISystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\ConstVariables.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\UI\EX_A_TextLog.cs" />
@@ -69,26 +74,23 @@
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerMessageSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\EX_A_Entry.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\MonoSingleton.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\BattleRoom.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerCommandSyncSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientTimerSystem.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\Player.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientRandomSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\UI\EX_A_Button.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\UI\EX_A_PlayerPanel.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerPlayerSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Common\Log.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientChasingFrameSystem.cs" />
     <Compile Include="Assets\Scenes\Scores.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\EX_A_Msg.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientMessageSystem.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Server\BattleSever.cs" />
     <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerLogicSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientRoomSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientTimerSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\BattleRoom.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientFrameSyncSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientRandomSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ClientChasingFrameSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\FrameChasing.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\GameHelper\GameHelper_Client\Player.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\System\ServerCommandStorageSystem.cs" />
-    <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\FixedPointNumber.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\PoolExtensions.cs" />
+    <Compile Include="Assets\Examples\AnEasyEx\Scripts\CommonUtils\ObjectPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />
