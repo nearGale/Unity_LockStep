@@ -24,7 +24,7 @@ namespace Mirror.EX_A
 
         /// <summary>
         /// 玩家对应的 network Identity
-        /// TODO：检查断线重连 / 换设备登录时是否会变化
+        /// 换设备登录时会变化
         /// </summary>
         public NetworkIdentity netIdentity;
     }
