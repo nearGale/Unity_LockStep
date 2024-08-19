@@ -34,7 +34,8 @@ namespace Mirror.EX_A
 
             if (battleServerTick - clientTick > ConstVariables.CommandSetSyncIntervalFrames)
             {
-                // 超过一次同步的帧间隔数量，客户端加速追帧
+                // 如果相差超过【一次同步的帧间隔数量】
+                //   => 客户端加速追帧
                 for (int i = 0; i < ConstVariables.CommandChasingPerFrame; i++)
                 {
                     GameHelper_Client.ChasingOneFrame();

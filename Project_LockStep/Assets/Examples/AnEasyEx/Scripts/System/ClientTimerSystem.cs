@@ -44,7 +44,11 @@ namespace Mirror.EX_A
         {
             if (clientTick >= battleServerTick) return;
 
-            ClientTickGrow(false);
+            var intervalPass = Time.time - _lastTickTime > ConstVariables.LogicFrameIntervalSeconds;
+            if (intervalPass)
+            {
+                ClientTickGrow();
+            }
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace Mirror.EX_A
         /// </summary>
         public void LogicUpdate_FrameChasing()
         {
-            ClientTickGrow(true);
+            ClientTickGrow();
         }
         #endregion
 
@@ -81,14 +85,14 @@ namespace Mirror.EX_A
             ClearData();
         }
 
-        public void ClientTickGrow(bool ignoreIntervalCheck)
+        /// <summary>
+        /// 客户端帧号增长
+        /// 快速追帧时无视帧间隔
+        /// </summary>
+        public void ClientTickGrow()
         {
-            var intervalPass = Time.time - _lastTickTime > ConstVariables.LogicFrameIntervalSeconds;
-            if (ignoreIntervalCheck || intervalPass)
-            {
-                clientTick++;
-                _lastTickTime = Time.time;
-            }
+            clientTick++;
+            _lastTickTime = Time.time;
         }
     }
 }

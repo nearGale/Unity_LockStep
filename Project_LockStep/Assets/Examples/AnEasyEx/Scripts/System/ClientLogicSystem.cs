@@ -38,20 +38,23 @@ namespace Mirror.EX_A
 
         public void LogicUpdate()
         {
-            if (!ClientRoomSystem.Instance.IsBattleRoomRunning()) return;
-
             var clientTick = GameHelper_Client.GetClientTick();
-            if(clientTick > _lastProcessClientTick)
+            var serverTick = GameHelper_Client.GetBattleServerTick();
+
+            if (!ClientRoomSystem.Instance.IsBattleRoomRunning() && clientTick > serverTick) return; // 小于等于 serverTick 可以继续模拟到服务器帧号
+
+            if (clientTick - _lastProcessClientTick > 1)
+            {
+                var err = $"ERR!!!! ClientLogicSystem [clientTick - lastProcessTick > 1] {clientTick} {_lastProcessClientTick}";
+                GameHelper_Common.UIErr(err);
+            }
+
+            if (clientTick > _lastProcessClientTick)
             {
                 val += 1;
                 _lastProcessClientTick = clientTick;
-            }
 
-            if(clientTick - _lastProcessClientTick > 1)
-            {
-                var err = $"ERR!!!! ClientLogicSystem [clientTick - lastProcessTick > 1] {clientTick} {_lastProcessClientTick}";
-                GameHelper_Common.UILog(err);
-                throw new Exception(err);
+                SnapshotBattleState();
             }
         }
         #endregion
@@ -80,12 +83,67 @@ namespace Mirror.EX_A
 
         public void ProcessCommand(CommandDetail detail)
         {
+            SnapshotAroundCommand(detail, true);
+            
             switch (detail.eCommand)
             {
                 case ECommand.multi:
                     val += ClientRandomSystem.Instance.GetRandomInt(50, 5000);
                     break;
             }
+
+            SnapshotAroundCommand(detail, false);
         }
+
+
+        #region snapshot 逻辑快照
+
+        /// <summary>
+        /// 对指令执行前/后，记录战斗状态快照
+        /// </summary>
+        /// <param name="detail">执行的指令</param>
+        /// <param name="isBefore">在指令之前 / 之后</param>
+        private void SnapshotAroundCommand(CommandDetail detail, bool isBefore)
+        {
+            if (!GameFacade.enableCommandSnapshot) return;
+
+            var preffix = $"player:{detail.playerId} " +
+                $"command:{detail.eCommand} " +
+                $"before:{isBefore} ";
+
+            SnapshotBattleState(preffix);
+        }
+
+
+        /// <summary>
+        /// 给当前战斗状态进行快照，存到指定文件中
+        /// </summary>
+        /// <param name="preffix">记录log的前缀</param>
+        private void SnapshotBattleState(string preffix = null)
+        {
+            if (!GameFacade.enableCommandSnapshot) return;
+
+            var snapshot = GetSnapshot();
+            var clientTick = GameHelper_Client.GetClientTick();
+
+            var logStr = $"t:{clientTick} " +
+                $"{preffix} " +
+                $"\n====snapshot====\n{snapshot}\n==============\n " +
+                $"\n";
+            GameHelper_Common.FileLog(GameFacade.commandSnapshotLogName, logStr);
+
+        }
+
+        /// <summary>
+        /// 获取战斗状态快照（string）
+        /// </summary>
+        /// <returns>战斗状态快照</returns>
+        private string GetSnapshot()
+        {
+            var snapshot = $"{val}";
+            return snapshot;
+        }
+
+        #endregion
     }
 }

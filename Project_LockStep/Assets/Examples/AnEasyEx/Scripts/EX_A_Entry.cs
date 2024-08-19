@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Mirror.EX_A
         void Start()
         {
             GameFacade.isServer = false;
+            GameFacade.startTime = DateTime.Now;
 
             foreach (var system in GameFacade.serverSystems)
             {
