@@ -34,7 +34,8 @@ namespace Mirror.EX_A
 
             var ct = GameHelper_Client.GetClientTick();
             var st = GameHelper_Client.GetBattleServerTick();
-            textTick.text = $"client:{ct} \n server:{st} \n delta:{st - ct}";
+            var rtt = (int)(GameHelper_Client.GetRTT() * 1000);
+            textTick.text = $"client:{ct} \n server:{st} \n delta:{st - ct} \n rtt:{rtt}";
 
             var clientInRoomState = ClientRoomSystem.Instance.GetClientInRoomState();
 

@@ -5,6 +5,20 @@ using UnityEngine;
 namespace Mirror.EX_A
 {
     /// <summary>
+     /// 心跳包请求
+     /// </summary>
+    public struct Msg_PingPong_Req : NetworkMessage
+    {
+    }
+
+    /// <summary>
+    /// 心跳包回包
+    /// </summary>
+    public struct Msg_PingPong_Rsp : NetworkMessage
+    {
+    }
+
+    /// <summary>
     /// 客户端连接到服务器后，给这个人下发回包
     /// 让客户端进行 ID 校验流程
     /// </summary>

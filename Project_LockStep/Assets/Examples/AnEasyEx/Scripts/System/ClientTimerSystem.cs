@@ -22,6 +22,9 @@ namespace Mirror.EX_A
         /// <summary> 上一帧逻辑帧的时间 </summary>
         private float _lastTickTime;
 
+        /// <summary> RTT 模块 </summary>
+        private Client_RTT _rtt = new();
+
         #region system func
         public void OnClientConnect()
         {
@@ -49,6 +52,8 @@ namespace Mirror.EX_A
             {
                 ClientTickGrow();
             }
+
+            _rtt.LogicUpdate();
         }
 
         /// <summary>
@@ -65,6 +70,7 @@ namespace Mirror.EX_A
             gameServerTick = 0;
             battleServerTick = 0;
             clientTick = 0;
+            _rtt.ClearRttData();
         }
 
         /// <summary>
@@ -96,5 +102,17 @@ namespace Mirror.EX_A
 
             GameHelper_Common.FileLog(GameFacade.commandSnapshotLogName, $"ClientTickGrow: clientTick:{clientTick} serverTick:{battleServerTick}");
         }
+
+        #region RTT
+        public float GetRTTValue()
+        {
+            return _rtt.GetValue();
+        }
+
+        public void OnRttRsp()
+        {
+            _rtt.OnRttRsp();
+        }
+        #endregion
     }
 }

@@ -37,6 +37,8 @@ namespace Mirror.EX_A
         /// </summary>
         public void RegisterMessageHandler()
         {
+            NetworkServer.RegisterHandler<Msg_PingPong_Req>(OnPingPongReq);
+
             NetworkServer.RegisterHandler<Msg_PlayerIdentify_Req>(OnPlayerIdentifyReq);
             NetworkServer.RegisterHandler<Msg_BattleStart_Req>(OnBattleStartReq);
             NetworkServer.RegisterHandler<Msg_BattleStop_Req>(OnBattleStopReq);
@@ -58,6 +60,12 @@ namespace Mirror.EX_A
         }
 
         #region 消息回调
+
+        private void OnPingPongReq(NetworkConnectionToClient conn, Msg_PingPong_Req msg)
+        {
+            Msg_PingPong_Rsp msgRsp = new();
+            conn.Send(msgRsp);
+        }
 
         private void OnPlayerIdentifyReq(NetworkConnectionToClient conn, Msg_PlayerIdentify_Req msg)
         {

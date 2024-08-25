@@ -38,6 +38,8 @@ namespace Mirror.EX_A
 
         public void RegisterMessageHandler()
         {
+            NetworkClient.RegisterHandler<Msg_PingPong_Rsp>(OnPingPongRsp);
+
             NetworkClient.RegisterHandler<Msg_PlayerConnect_Rsp>(OnPlayerConnectRsp);
             NetworkClient.RegisterHandler<Msg_PlayerIdentify_Rsp>(OnPlayerIdentifyRsp);
             NetworkClient.RegisterHandler<Msg_ClientWillDisconnect_Rsp>(OnClientWillDisconnectRsp);
@@ -65,6 +67,12 @@ namespace Mirror.EX_A
             NetworkClient.UnregisterHandler<Msg_Command_Ntf>();
             NetworkClient.UnregisterHandler<Msg_CommandAll_Rsp>();
         }
+
+        private void OnPingPongRsp(Msg_PingPong_Rsp msg)
+        {
+            ClientTimerSystem.Instance.OnRttRsp();
+        }
+
 
         private void OnPlayerConnectRsp(Msg_PlayerConnect_Rsp msg)
         {
