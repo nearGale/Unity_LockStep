@@ -4,6 +4,8 @@
 
 Unity版本：2021.3.13f1
 
+另外（剥离Unity、Mirrior依赖）纯C#的实现在这里：https://github.com/nearGale/CSharp_Helper_LockStep
+
 ### 登陆验证
 同号登录会顶掉之前的客户端
 
